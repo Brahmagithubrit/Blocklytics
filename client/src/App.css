@@ -4,31 +4,55 @@
   gap: 16px;
   justify-content: space-between;
   margin: 20px;
-  font-family: Legibility;
+  font-family: Consolas;
 }
 
-.main_content > div {
-  flex: 0 0 calc(33% - 16px);
-  margin-bottom: 16px;
-    font-family: Legibility;
+#pc_content {
+  display: block;
+}
+#mobile_content {
+  display: none;
+}
 
+.main_content_div_text {
+  margin-bottom: 16px;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 2px;
 }
 
 @media (min-width: 1024px) {
+  .parentContent {
+    display: flex;
+    justify-content: center;
+  }
   .main_content > div {
-    flex: 0 0 calc(33% - 16px);
-      font-family: Legibility;
-
+    flex: 0 0 calc(25% - 16px);
+    height: 350px;
   }
 }
 
 /* give code for media for mobile screen  */
 
 @media (max-width: 599px) {
+  .parentContent {
+    display: flex;
+    justify-content: center;
+  }
   .main_content > div {
     flex: 0 0 calc(50% - 16px); /* Two cards per row */
     width: 150px;
-      font-family: Legibility;
+    height: 350px;
+    margin-bottom: 5px;
+  }
+}
 
+@media screen and (max-width: 559px) {
+  #pc_content {
+    display: none;
+  }
+  #mobile_content {
+    display: block;
   }
 }

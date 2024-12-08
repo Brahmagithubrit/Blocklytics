@@ -45,10 +45,19 @@ export default function MasterCard({ name, image }) {
           alt={`${name} image`}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography
+            className="main_content_div_text"
+            gutterBottom
+            variant="h5"
+            component="div"
+          >
             {coinname || (error ? "Error loading" : "Loading...")}
           </Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+          <Typography
+            className="main_content_div_text"
+            variant="body2"
+            sx={{ color: "text.secondary" }}
+          >
             {error ? (
               "Failed to load data"
             ) : (
