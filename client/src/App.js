@@ -41,7 +41,7 @@ export default function App() {
             <Route path="/" element={<DashBoardCopy />} />
 
             <Route path="/history" element={<History />} />
-            <Route path="/sign_up" element={<Sign_up />} />
+            <Route path="/signup" element={<Sign_up />} />
             <Route path="/login" element={<Login />} />
             <Route path="/wallettracker" element={<WalletTracker />} />
             <Route path="/priceprediction" element={<PricePrediction />} />

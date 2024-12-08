@@ -17,14 +17,20 @@ const startServer = async () => {
     await fetchCoins(); // Ensure initial data fetch is completed before starting the server
 
     app.use(bodyParser.json());
-    app.use(cors());
-
+    app.use(
+      cors({
+        origin: "http://localhost:3000", // Frontend URL
+        methods: ["GET", "POST"],
+        credentials: true, // Allow cookies
+      })
+    );
 
     app.get("/", (req, res) => {
       res.send("Hi browser, how are you !!!");
     });
 
     app.use("/coins", coinRoutes);
+    app.use("/auth", coinRoutes);
 
     app.listen(port, () => console.log(`App listening on port ${port}`));
 

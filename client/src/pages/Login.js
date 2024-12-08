@@ -1,39 +1,45 @@
-import * as React from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { AppProvider } from "@toolpad/core/AppProvider";
-import { SignInPage } from "@toolpad/core/SignInPage";
+import {useNavigate} from "react-router-dom";
 
-const providers = [
-  { id: "github", name: "GitHub" },
-  { id: "google", name: "Google" },
-  { id: "credentials", name: "Email and Password" },
-];
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-const signIn = async (provider) => {
-  if (provider.id === "credentials") {
-    const email = prompt("Enter your email:");
-    const password = prompt("Enter your password:");
+  const handleLogin = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/login", {
+      const response = await axios.post("http://localhost:5000/auth/login", {
         email,
         password,
       });
-      console.log(response.data.message);
-    } catch (error) {
-      console.error(
-        "Error during login:",
-        error.response?.data?.message || error.message
-      );
+      console.log(email, password);
+      console.log("Login successful:", response.data);
+      navigate("/");
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Login failed. Please check your credentials.");
     }
-  } else {
-    console.log(`Sign in with ${provider.id} not implemented yet`);
-  }
-};
+  };
 
-export default function Login() {
   return (
-    <AppProvider>
-      <SignInPage text={signIn} signIn={signIn} providers={providers} />
-    </AppProvider>
+    <div>
+      <h2>Login</h2>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+      />
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Password"
+      />
+      <button onClick={handleLogin}>Sign In</button>
+      {error && <p>{error}</p>}
+    </div>
   );
 }

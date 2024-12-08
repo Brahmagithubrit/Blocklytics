@@ -109,7 +109,7 @@ export default function Header({ toggleDrawer }) {
             id="pc_content"
             variant="text"
             style={{ color: "white", margin: "5px" }}
-            href="/sign_up"
+            href="/signup"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
             sign up
@@ -117,6 +117,7 @@ export default function Header({ toggleDrawer }) {
           <Button
             id="pc_content"
             variant="text"
+            href="/login"
             style={{ color: "white", margin: "5px" }}
             sx={{ display: { xs: "none", sm: "block" } }}
           >
@@ -143,7 +144,7 @@ export default function Header({ toggleDrawer }) {
           >
             <MenuItem
               onClick={() => {
-                window.location.href = "/sign_up";
+                window.location.href = "/signup";
                 handleDropdownClose();
               }}
             >

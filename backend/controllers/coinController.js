@@ -1,6 +1,10 @@
 const axios = require("axios");
 const env = require("dotenv");
-const currency = require("../models/model.index");
+const { currency, User } = require("../models/model.index");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const cookies = require("cookies");
+
 const mongoose = require("mongoose");
 env.config();
 
@@ -177,8 +181,71 @@ const getDeviation = async (req, res) => {
   }
 };
 
+const Signup = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
+      return res
+        .status(400)
+        .send("All field should be filled up before proceeding");
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).send("User with this email already exists");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const userData = {
+      name,
+      email,
+      password: hashedPassword,
+    };
+
+    const newUser = new User(userData);
+    console.log("new user created ");
+
+    await newUser.save();
+    console.log("new user inserted to db ");
+    res.status(200).send("user inserted  ");
+  } catch (err) {
+    console.log(`some error occur in creating new user , error is  : ${err}`);
+    res.status(500).send(`error is : ${err}`);
+  }
+};
+
+const Login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ error: "Authentication failed" });
+    }
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).json({ error: "Authentication failed" });
+    }
+    const token = jwt.sign({ userId: user._id }, process.env.jwt_secret, {
+      expiresIn: "1h",
+    });
+    res.cookie("cryptoToken", token, {
+      httpOnly: true, // to prevent client-side access to the cookie
+      secure: process.env.NODE_ENV === "production", // only send over HTTPS in production
+      maxAge: 3600000, // 1 hour
+      sameSite: "strict", // helps prevent CSRF attacks
+    });
+    res.status(200).json({ token });
+  } catch (error) {
+    console.log(`${error}`);
+    res.status(500).json({ error: "Login failed" });
+  }
+};
+
 module.exports = {
   fetchCoins,
   getStats,
   getDeviation,
+  Signup,
+  Login,
 };
