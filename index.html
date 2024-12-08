@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>drawer</title>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        width: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .container {
+        background-color: blue;
+        height: 100vh;
+        width: 300px;
+        position: absolute;
+      }
+      #closebtn {
+        background-color: black;
+        height: 100px;
+        width: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <button id="closebtn"> close </button>
+    </div>
+
+    <button id="btn"> open Drawer </button>
+    <script>
+      const btn = document.getElementById("btn");
+      const division = document.querySelector(".container");
+      const closebtn = document.getElementById("closebtn");
+
+      division.style.transform = "translateX(-300px)";
+      btn.addEventListener("click", () => open());
+      closebtn.addEventListener("click", () => close());
+
+      function open() {
+        division.style.transform = "translateX(0px)";
+        division.style.transition = "transform 1s ease";
+      }
+
+      function close() {
+        division.style.transform = "translateX(-300px)";
+        division.style.transition = "transform 1s ease-in";
+      }
+    </script>
+  </body>
+</html>
