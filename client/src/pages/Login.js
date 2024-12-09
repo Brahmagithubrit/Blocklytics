@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Alert } from "@mui/material";
+
+
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -17,6 +21,7 @@ export default function Login() {
       console.log(email, password);
       console.log("Login successful:", response.data);
       navigate("/");
+      
     } catch (err) {
       console.error("Login error:", err);
       setError("Login failed. Please check your credentials.");
