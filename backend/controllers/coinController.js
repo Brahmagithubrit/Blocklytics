@@ -4,9 +4,16 @@ const { currency, User } = require("../models/model.index");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const cookies = require("cookies");
+const cookieParser = require("cookie-parser");
+const express = require("express");
+const { generateToken, validateToken } = require("../middleware/jwt_token");
+
+const app = express();
 
 const mongoose = require("mongoose");
 env.config();
+
+app.use(cookieParser());
 
 const fetchCoins = async () => {
   console.log("Fetching coin data...");
@@ -226,10 +233,14 @@ const Login = async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ error: "Authentication failed" });
     }
-    const token = jwt.sign({ userId: user._id }, process.env.jwt_secret, {
-      expiresIn: "1h",
-    });
-    res.cookie("cryptoToken", token, {
+    const payload = {
+      email,
+      password,
+    };
+
+    const generatedToken = generateToken(payload);
+
+    res.cookie("cryptoToken", generatedToken, {
       httpOnly: true, // to prevent client-side access to the cookie
       secure: process.env.NODE_ENV === "production", // only send over HTTPS in production
       maxAge: 3600000, // 1 hour
