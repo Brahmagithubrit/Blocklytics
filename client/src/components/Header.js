@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
@@ -13,7 +13,7 @@ import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { deepOrange, deepPurple } from "@mui/material/colors";
+import cookies from "js-cookie";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -56,21 +56,37 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+const validateToken = () => {
+  const cookie = cookies.get("cryptoToken");
+  console.debug("Token in cookie:", cookie);
+  return !!cookie;
+};
+
 export default function Header({ toggleDrawer }) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const open = Boolean(anchorEl);
 
   const handleMenuClick = () => {
     toggleDrawer(true);
+    console.debug("Drawer toggle triggered");
   };
 
   const handleDropdownClick = (event) => {
     setAnchorEl(event.currentTarget);
+    console.debug("Dropdown opened");
   };
 
   const handleDropdownClose = () => {
     setAnchorEl(null);
+    console.debug("Dropdown closed");
   };
+
+  useEffect(() => {
+    const tokenValid = validateToken();
+    setIsLoggedIn(tokenValid);
+    console.debug("Is logged in:", tokenValid);
+  }, []);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -104,7 +120,6 @@ export default function Header({ toggleDrawer }) {
             />
           </Search>
 
-          {/* Desktop Buttons */}
           <Button
             id="pc_content"
             variant="text"
@@ -124,36 +139,44 @@ export default function Header({ toggleDrawer }) {
             Login
           </Button>
 
-          {/* Mobile Dropdown */}
-          <LockOpenIcon
-            id="mobile_content"
-            size="large"
-            edge="end"
-            color="inherit"
-            aria-label="mobile menu"
-            onClick={handleDropdownClick}
-            sx={{ display: { xs: "block", sm: "none" } }}
-          >
-            <MenuIcon />
-          </LockOpenIcon>
-          <Menu
-            id="mobile-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleDropdownClose}
-          >
-            <MenuItem
-              onClick={() => {
-                window.location.href = "/signup";
-                handleDropdownClose();
-              }}
-            >
-              Sign Up
-            </MenuItem>
-            <MenuItem onClick={handleDropdownClose}>Login</MenuItem>
-          </Menu>
-
-          <Avatar style={{ height: "35px", width: "35px" }}>A</Avatar>
+          {!isLoggedIn ? (
+            <>
+              <LockOpenIcon
+                id="mobile_content"
+                size="large"
+                edge="end"
+                color="inherit"
+                aria-label="mobile menu"
+                onClick={handleDropdownClick}
+                sx={{ display: { xs: "block", sm: "none" } }}
+              />
+              <Menu
+                id="mobile-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleDropdownClose}
+              >
+                <MenuItem
+                  onClick={() => {
+                    window.location.href = "/signup";
+                    handleDropdownClose();
+                  }}
+                >
+                  Sign Up
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    window.location.href = "/login";
+                    handleDropdownClose();
+                  }}
+                >
+                  Login
+                </MenuItem>
+              </Menu>
+            </>
+          ) : (
+            <Avatar style={{ height: "35px", width: "35px" }}>A</Avatar>
+          )}
         </Toolbar>
       </AppBar>
     </Box>

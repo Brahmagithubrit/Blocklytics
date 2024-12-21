@@ -3,39 +3,26 @@ const env = require("dotenv");
 const { currency, User } = require("../models/model.index");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const cookies = require("cookies");
 const cookieParser = require("cookie-parser");
 const express = require("express");
-const { generateToken, validateToken } = require("../middleware/jwt_token");
-
-const app = express();
-
+const { generateToken } = require("../middleware/jwt_token");
 const mongoose = require("mongoose");
-env.config();
 
+env.config();
+const app = express();
 app.use(cookieParser());
 
 const fetchCoins = async () => {
-  console.log("Fetching coin data...");
-
   try {
-    if (mongoose.connection.readyState !== 1) {
-      console.error("MongoDB is not connected.");
-      return;
-    }
+    if (mongoose.connection.readyState !== 1) return;
 
     const response = await axios.get(process.env.site_url, {
       params: {
         vs_currency: "usd",
         ids: "bitcoin,ethereum,matic-network,solana,litecoin,polkadot,dogecoin",
       },
-      headers: {
-        accept: "application/json",
-      },
+      headers: { accept: "application/json" },
     });
-
-    console.log("Coin data fetched successfully.");
-    console.log("Raw response data:", response.data);
 
     const data = {
       bitcoin: response.data.find((coin) => coin.id === "bitcoin"),
@@ -46,9 +33,6 @@ const fetchCoins = async () => {
       polkadot: response.data.find((coin) => coin.id === "polkadot"),
       dogecoin: response.data.find((coin) => coin.id === "dogecoin"),
     };
-
-    console.log("Coin data formatted.");
-    console.log("Formatted data:", data);
 
     const formattedData = {
       bitcoin: {
@@ -88,25 +72,15 @@ const fetchCoins = async () => {
       },
     };
 
-    console.log("Formatted data ready for MongoDB.");
-    console.log("Formatted data for saving:", formattedData);
-
     const currencyData = new currency(formattedData);
-    console.log("Prepared data for MongoDB:", currencyData);
-
     await currencyData.save();
-
-    console.log("Data saved to MongoDB successfully.");
   } catch (error) {
-    console.error("Error fetching or saving coin data:", error.message);
+    console.error("Error:", error.message);
   }
 };
 
 const getStats = async (req, res) => {
-  console.log("Fetching stats for coin:", req.query.coin);
-
   const coinType = req.query.coin;
-
   if (
     ![
       "bitcoin",
@@ -118,31 +92,19 @@ const getStats = async (req, res) => {
       "dogecoin",
     ].includes(coinType)
   ) {
-    console.log("Invalid coin type:", coinType);
     return res.status(400).send("Invalid coin type.");
   }
-
   try {
     const latestData = await currency.findOne().sort({ created_at: -1 }).exec();
-
-    if (!latestData) {
-      console.log("No data found in the database.");
-      return res.status(404).send("No data found.");
-    }
-
-    console.log("Retrieved latest data:", latestData[coinType]);
+    if (!latestData) return res.status(404).send("No data found.");
     res.json(latestData[coinType]);
   } catch (error) {
-    console.error("Error fetching stats:", error.message);
     res.status(500).send("Error fetching stats.");
   }
 };
 
 const getDeviation = async (req, res) => {
-  console.log("Calculating deviation for coin:", req.query.coin);
-
   const coinType = req.query.coin;
-
   if (
     ![
       "bitcoin",
@@ -154,36 +116,22 @@ const getDeviation = async (req, res) => {
       "dogecoin",
     ].includes(coinType)
   ) {
-    console.log("Invalid coin type:", coinType);
     return res.status(400).send("Invalid coin type.");
   }
-
   try {
     const data = await currency
       .find({}, { [coinType]: 1, _id: 0 })
       .limit(100)
       .exec();
-
-    if (!data.length) {
-      console.log("No records found for the coin.");
-      return res.status(404).send("No data found.");
-    }
-
+    if (!data.length) return res.status(404).send("No data found.");
     const values = data.map((entry) => entry[coinType].current_price);
     const mean = values.reduce((acc, val) => acc + val, 0) / values.length;
-
-    console.log("Calculated mean price:", mean);
-
     const stdDev = Math.sqrt(
       values.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) /
         values.length
     );
-
-    console.log("Calculated standard deviation:", stdDev);
-
     res.json({ mean, standardDeviation: stdDev });
   } catch (error) {
-    console.error("Error calculating deviation:", error.message);
     res.status(500).send("Error calculating deviation.");
   }
 };
@@ -191,34 +139,15 @@ const getDeviation = async (req, res) => {
 const Signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    if (!name || !email || !password) {
-      return res
-        .status(400)
-        .send("All field should be filled up before proceeding");
-    }
-
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(409).send("User with this email already exists");
-    }
-
+    if (!name || !email || !password)
+      return res.status(400).send("All fields are required.");
+    if (await User.findOne({ email }))
+      return res.status(409).send("User with this email already exists.");
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const userData = {
-      name,
-      email,
-      password: hashedPassword,
-    };
-
-    const newUser = new User(userData);
-    console.log("new user created ");
-
-    await newUser.save();
-    console.log("new user inserted to db ");
-    res.status(200).send("user inserted  ");
+    await new User({ name, email, password: hashedPassword }).save();
+    res.status(200).send("User inserted.");
   } catch (err) {
-    console.log(`some error occur in creating new user , error is  : ${err}`);
-    res.status(500).send(`error is : ${err}`);
+    res.status(500).send(`Error: ${err}`);
   }
 };
 
@@ -226,37 +155,20 @@ const Login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    if (!user) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ error: "Authentication failed" });
     }
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      return res.status(401).json({ error: "Authentication failed" });
-    }
-    const payload = {
-      email,
-      password,
-    };
-
-    const generatedToken = generateToken(payload);
-
+    const generatedToken = generateToken({ email, password });
     res.cookie("cryptoToken", generatedToken, {
-      httpOnly: true, // to prevent client-side access to the cookie
-      secure: process.env.NODE_ENV === "production", // only send over HTTPS in production
-      maxAge: 3600000, // 1 hour
-      sameSite: "strict", // helps prevent CSRF attacks
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 3600000,
+      sameSite: "strict",
     });
-    res.status(200).json({ token });
+    res.status(200).json({ generatedToken });
   } catch (error) {
-    console.log(`${error}`);
     res.status(500).json({ error: "Login failed" });
   }
 };
 
-module.exports = {
-  fetchCoins,
-  getStats,
-  getDeviation,
-  Signup,
-  Login,
-};
+module.exports = { fetchCoins, getStats, getDeviation, Signup, Login };

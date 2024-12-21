@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
+const secretKey = "brahma";
+
 function generateToken(payload) {
   const jwtToken = jwt.sign(payload, secretKey, { expiresIn: "24h" });
 
   return jwtToken;
 }
-
 
 function validateToken(req, res, next) {
   const token = req.cookies.token;
@@ -22,7 +23,6 @@ function validateToken(req, res, next) {
     next();
   });
 }
-
 
 module.exports = {
   generateToken,

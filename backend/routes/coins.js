@@ -10,10 +10,10 @@ const { generateToken, validateToken } = require("../middleware/jwt_token");
 
 const router = express.Router();
 
-router.get("/stats",validateToken, getStats);
-router.get("/deviation",validateToken, getDeviation);
-router.post("/signup",validateToken, Signup);
-router.post("/login",validateToken, Login);
+router.get("/stats",getStats);
+router.get("/deviation", getDeviation);
+router.post("/signup",Signup);
+router.post("/login", Login);
 
 
 module.exports = router;
