@@ -14,6 +14,7 @@ import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import cookies from "js-cookie";
+import axios from "axios";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -56,12 +57,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const validateToken = () => {
-  const cookie = cookies.get("cryptoToken");
-  console.debug("Token in cookie:", cookie);
-  return !!cookie;
-};
-
 export default function Header({ toggleDrawer }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -69,23 +64,38 @@ export default function Header({ toggleDrawer }) {
 
   const handleMenuClick = () => {
     toggleDrawer(true);
-    console.debug("Drawer toggle triggered");
   };
 
   const handleDropdownClick = (event) => {
     setAnchorEl(event.currentTarget);
-    console.debug("Dropdown opened");
   };
 
   const handleDropdownClose = () => {
     setAnchorEl(null);
-    console.debug("Dropdown closed");
   };
 
   useEffect(() => {
-    const tokenValid = validateToken();
-    setIsLoggedIn(tokenValid);
-    console.debug("Is logged in:", tokenValid);
+    console.log("entering into useeffect ");
+    const token = cookies.get("cryptoToken");
+    if (token) {
+      console.log("token is present");
+
+      axios
+        .get(`process.env.REACT_APP_BACKEND_URL/auth/isLoggedIn`, { token })
+        .then((response) => {
+          if (response.data.valid) {
+            console.log("true returning from backend")
+            setIsLoggedIn(true);
+          }
+        })
+        .catch(() => {
+          setIsLoggedIn(false);
+        });
+    } else {
+      console.log("token is not present");
+
+      setIsLoggedIn(false);
+    }
   }, []);
 
   return (
@@ -119,28 +129,26 @@ export default function Header({ toggleDrawer }) {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-
-          <Button
-            id="pc_content"
-            variant="text"
-            style={{ color: "white", margin: "5px" }}
-            href="/signup"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
-            sign up
-          </Button>
-          <Button
-            id="pc_content"
-            variant="text"
-            href="/login"
-            style={{ color: "white", margin: "5px" }}
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
-            Login
-          </Button>
-
           {!isLoggedIn ? (
             <>
+              <Button
+                id="pc_content"
+                variant="text"
+                style={{ color: "white", margin: "5px" }}
+                href="/signup"
+                sx={{ display: { xs: "none", sm: "block" } }}
+              >
+                Sign Up
+              </Button>
+              <Button
+                id="pc_content"
+                variant="text"
+                href="/login"
+                style={{ color: "white", margin: "5px" }}
+                sx={{ display: { xs: "none", sm: "block" } }}
+              >
+                Login
+              </Button>
               <LockOpenIcon
                 id="mobile_content"
                 size="large"

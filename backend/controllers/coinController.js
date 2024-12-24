@@ -3,14 +3,24 @@ const env = require("dotenv");
 const { currency, User } = require("../models/model.index");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const cookieParser = require("cookie-parser");
+const cookie = require("cookie-parser");
 const express = require("express");
 const { generateToken } = require("../middleware/jwt_token");
 const mongoose = require("mongoose");
+const cors = require("cors");
+
+const app = express();
 
 env.config();
-const app = express();
-app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+
+app.use(express.json()); 
+app.use(cookie());
 
 const fetchCoins = async () => {
   try {
@@ -79,6 +89,7 @@ const fetchCoins = async () => {
   }
 };
 
+// Get the latest stats for a specific coin
 const getStats = async (req, res) => {
   const coinType = req.query.coin;
   if (
@@ -103,6 +114,7 @@ const getStats = async (req, res) => {
   }
 };
 
+// Get the deviation (mean and standard deviation) for a specific coin
 const getDeviation = async (req, res) => {
   const coinType = req.query.coin;
   if (
@@ -136,39 +148,11 @@ const getDeviation = async (req, res) => {
   }
 };
 
-const Signup = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    if (!name || !email || !password)
-      return res.status(400).send("All fields are required.");
-    if (await User.findOne({ email }))
-      return res.status(409).send("User with this email already exists.");
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await new User({ name, email, password: hashedPassword }).save();
-    res.status(200).send("User inserted.");
-  } catch (err) {
-    res.status(500).send(`Error: ${err}`);
-  }
-};
 
-const Login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ error: "Authentication failed" });
-    }
-    const generatedToken = generateToken({ email, password });
-    res.cookie("cryptoToken", generatedToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 3600000,
-      sameSite: "strict",
-    });
-    res.status(200).json({ generatedToken });
-  } catch (error) {
-    res.status(500).json({ error: "Login failed" });
-  }
-};
 
-module.exports = { fetchCoins, getStats, getDeviation, Signup, Login };
+module.exports = {
+  fetchCoins,
+  getStats,
+  getDeviation,
+ 
+};

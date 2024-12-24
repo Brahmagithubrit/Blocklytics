@@ -39,7 +39,6 @@ export default function App() {
           {/* Main content area */}
           <Routes>
             <Route path="/" element={<DashBoardCopy />} />
-
             <Route path="/history" element={<History />} />
             <Route path="/signup" element={<Sign_up />} />
             <Route path="/login" element={<Login />} />

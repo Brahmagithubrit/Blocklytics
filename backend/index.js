@@ -25,7 +25,9 @@ const startServer = async () => {
       })
     );
 
-    app.get("/", (req, res) => res.send("Hi browser, how are you !!!"));
+    app.get("/", (req, res) => {
+      res.send("Hi browser, how are you !!!");
+    });
 
     app.use("/coins", coinRoutes);
     app.use("/auth", coinRoutes);
