@@ -15,6 +15,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import cookies from "js-cookie";
 import axios from "axios";
+import "../App.css";
+
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -99,9 +101,9 @@ export default function Header({ toggleDrawer }) {
   }, []);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
+    <Box className="headerStyle" sx={{ flexGrow: 1 }}>
+      <AppBar className="headerStyle" position="static">
+        <Toolbar className="headerStyle">
           <IconButton
             size="large"
             edge="start"

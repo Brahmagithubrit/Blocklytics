@@ -26,6 +26,7 @@
   .parentContent {
     display: flex;
     justify-content: center;
+    flex-direction: row;
   }
   .main_content > div {
     flex: 0 0 calc(25% - 16px);
@@ -38,8 +39,42 @@
 @media (max-width: 599px) {
   .parentContent {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    /* justify-content: center; */
   }
+  .headerStyle {
+    /* height: 100px; */
+    padding: 3px;
+    display: flex;
+    position: static;
+    gap: 20px;
+    justify-content: end;
+  }
+
+  .uppermarquee {
+    width: auto;
+    height: 50px;
+    display: flex;
+    gap: 15px;
+    /* font-weight:lighter !important ; */
+    text-align: center;
+    /* margin-bottom : 20px ; */
+  }
+
+  /* .list {
+    display: flex;
+    flex-direction: row;
+    flex: 0 0 calc (10% - 16px);
+    height: 20px; 
+    width: 200px;
+  } */
+
+  .marqueeParent {
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 50px;
+  }
+
   .main_content > div {
     flex: 0 0 calc(50% - 16px); /* Two cards per row */
     width: 150px;
