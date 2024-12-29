@@ -10,7 +10,8 @@ import PricePrediction from "./pages/PricePrediction";
 import WalletTracker from "./pages/WalletTracker";
 import TransactionPage from "./pages/Transaction";
 import NewsUpdate from "./pages/NewsUpdate";
-
+import WishList from "./pages/WishList.js";
+import Buy from "./pages/Buy.js";
 
 export default function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -46,6 +47,8 @@ export default function App() {
             <Route path="/priceprediction" element={<PricePrediction />} />
             <Route path="/transaction" element={<TransactionPage />} />
             <Route path="/newsupdate" element={<NewsUpdate />} />
+            <Route path="/wishlist" element={<WishList />} />
+            <Route path="/buy" element={<Buy />} />
           </Routes>
         </div>
       </div>

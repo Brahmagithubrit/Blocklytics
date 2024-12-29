@@ -1,17 +1,26 @@
+/* General Styling */
+body {
+  font-family: Consolas, "Courier New", monospace;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.parentContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 10px;
+}
+
 .main_content {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  justify-content: space-between;
+  justify-content: center;
   margin: 20px;
   font-family: Consolas;
-}
-
-#pc_content {
-  display: block;
-}
-#mobile_content {
-  display: none;
 }
 
 .main_content_div_text {
@@ -22,28 +31,40 @@
   padding: 2px;
 }
 
-@media (min-width: 1024px) {
-  .parentContent {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-  }
-  .main_content > div {
-    flex: 0 0 calc(25% - 16px);
-    height: 350px;
-  }
+/* Hide PC content for mobile screens */
+#pc_content {
+  display: block;
 }
 
-/* give code for media for mobile screen  */
+#mobile_content {
+  display: none;
+}
 
+/* Media Queries for Mobile Screens */
 @media (max-width: 599px) {
+  .dashBoard {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-item: center;
+    text-align: center;
+  }
+
+  .Buy {
+    display: flex;
+    flex-direction: row;
+  }
+  .desc {
+    display: flex;
+    flex-direction: column;
+  }
   .parentContent {
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
   }
+
   .headerStyle {
-    /* height: 100px; */
     padding: 3px;
     display: flex;
     position: static;
@@ -51,23 +72,26 @@
     justify-content: end;
   }
 
+  .btnStyle {
+    width: 70px;
+    height: 50px;
+    text-decoration: none;
+    margin: 10px;
+    font-size: 25px;
+    padding: 5px;
+    border: none;
+    color: black;
+    /* margin-left: 130px; */
+    /* z-index: 100; */
+  }
+
   .uppermarquee {
-    width: auto;
+    width: 100%;
     height: 50px;
     display: flex;
     gap: 15px;
-    /* font-weight:lighter !important ; */
     text-align: center;
-    /* margin-bottom : 20px ; */
   }
-
-  /* .list {
-    display: flex;
-    flex-direction: row;
-    flex: 0 0 calc (10% - 16px);
-    height: 20px; 
-    width: 200px;
-  } */
 
   .marqueeParent {
     padding-left: 20px;
@@ -75,19 +99,65 @@
     height: 50px;
   }
 
+  /* Cards Layout for Mobile */
   .main_content > div {
     flex: 0 0 calc(50% - 16px); /* Two cards per row */
     width: 150px;
     height: 350px;
-    margin-bottom: 5px;
+    margin-bottom: 50px;
+
+    /* margin-bottom: 20px; */
+  }
+
+  .cardSelect {
+    height: 400px;
+    width: 280px;
+    display: flex;
+    justify-content: center;
+    align-item: center;
+    text-align: center;
+
+    flex-direction: column;
+  }
+  .Row {
+    display: flex;
+    flex-direction: row;
+  }
+  .wishBoxContainer {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 20px;
+  }
+  .wishBox {
+    width: 30px;
+    z-index: 10;
+    height: 30px;
+    /* margin-left:100px ; */
   }
 }
 
+/* Show mobile content and hide PC content */
 @media screen and (max-width: 559px) {
   #pc_content {
     display: none;
   }
+
   #mobile_content {
     display: block;
+  }
+}
+
+/* Media Queries for Larger Screens (e.g., Tablets and Above) */
+@media (min-width: 1024px) {
+  .parentContent {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+  }
+
+  .main_content > div {
+    flex: 0 0 calc(25% - 16px);
+    height: 350px;
   }
 }
