@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { MyWishList } from "../Contexts/MyWishListContext";
+import "../App.css";
 
 export default function WishList() {
   const { wishlist } = useContext(MyWishList);
@@ -9,7 +10,12 @@ export default function WishList() {
       <h3>Wishlist</h3>
       <ul>
         {wishlist.length > 0 ? (
-          wishlist.map((item, index) => <li key={index}>{item}</li>)
+          wishlist.map((item, index) => (
+            <div className="Row">
+              <li key={index}>{item}</li>
+              <button>Buy</button>
+            </div>
+          ))
         ) : (
           <p>No items in the wishlist</p>
         )}
