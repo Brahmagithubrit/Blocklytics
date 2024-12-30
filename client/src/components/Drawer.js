@@ -23,7 +23,7 @@ export default function DrawerComp({ drawerOpen, toggleDrawer }) {
       onClick={() => toggleDrawer(false)} // Close the drawer on item click
     >
       <List>
-        {["PricePrediction", "WalletTracker", "Transaction", "NewsUpdate"].map((text, index) => (
+        {["PricePrediction", "WalletTracker", "Transaction", "NewsUpdate","wishlist"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <Link to={`/${text.toLowerCase().replace(" ", "_")}` } style={{ textDecoration: 'none', color: 'inherit' }}>
               <ListItemButton>
