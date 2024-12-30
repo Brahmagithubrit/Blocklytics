@@ -1,15 +1,19 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
+import React, { useContext } from "react";
+import { MyWishList } from "../Contexts/MyWishListContext";
 
+export default function WishList() {
+  const { wishlist } = useContext(MyWishList);
 
-export default function WishList({ coinname }) {
-          const location = useLocation();
-          const coin = location.state;
   return (
-    <>
-    <p>{coin.coinname}</p>
-      {/* <MasterCard name={cardSelect.coinname} image={cardSelect.image} /> */}
-    </>
+    <div className="wishlist">
+      <h3>Wishlist</h3>
+      <ul>
+        {wishlist.length > 0 ? (
+          wishlist.map((item, index) => <li key={index}>{item}</li>)
+        ) : (
+          <p>No items in the wishlist</p>
+        )}
+      </ul>
+    </div>
   );
 }

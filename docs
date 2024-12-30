@@ -6,3 +6,12 @@ it not properly set cookie but why i dont know
 issue with wishlist star btn 
 why style will not injecting to it 
 overlapping between cards and wishlist star btn 
+
+
+
+
+issue with wishlist useContext 
+i context provider in global in app.js 
+when i add item to wishlist array 
+items are show in same page in same routes but not in different routes why 
+when i changing routes to another routes wishlist become empty why even i declare context globally 
