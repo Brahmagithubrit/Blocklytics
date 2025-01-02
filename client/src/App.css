@@ -4,6 +4,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* height:100vh; */
 }
 
 .parentContent {
@@ -51,15 +52,15 @@ body {
     text-align: center;
   }
   button {
-    border:none;
-    text-decoration:none;
-    margin-left:10px;
-    margin-right:10px ;
+    border: none;
+    text-decoration: none;
+    margin-left: 10px;
+    margin-right: 10px;
   }
-  button:hover{
-    background:black;
-    color:white;
-    border-radius:3px ;
+  button:hover {
+    background: black;
+    color: white;
+    border-radius: 3px;
   }
 
   .Buy {
@@ -133,9 +134,9 @@ body {
   .Row {
     display: flex;
     flex-direction: row;
-    justify-content:center;
-    margin:20px;
-    padding:3px;
+    justify-content: center;
+    margin: 20px;
+    padding: 3px;
   }
   .wishBoxContainer {
     display: flex;
@@ -149,6 +150,34 @@ body {
     height: 30px;
     /* margin-left:100px ; */
   }
+  .footer {
+    position: fixed;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+    background-color: #f1f1f1; 
+    color: black;
+    font-size: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-left:5px;
+    margin-right:5px;
+    margin-top:15px;
+    padding-bottom:5px;
+    font-weight:lighter;
+
+    align-items: center;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); 
+    z-index: 100; 
+}
+.footer p {
+  margin:10px;
+}
+.alert {
+  position : relative ;
+  
+}
 }
 
 /* Show mobile content and hide PC content */
@@ -169,13 +198,11 @@ body {
     flex-direction: column !important;
   }
   .dashBoard {
-    display :flex ;
-    justify-content:center ;
-    align-item:center ;
-    text-align:center ;
+    display: flex;
+    justify-content: center;
+    align-item: center;
+    text-align: center;
   }
-
-
 
   .Buy {
     display: flex;
@@ -185,7 +212,6 @@ body {
     display: flex;
     flex-direction: column;
   }
-  
 
   .headerStyle {
     padding: 3px;
@@ -230,7 +256,8 @@ body {
   .main_content > div {
     flex: 0 0 calc(25% - 16px);
     height: 350px;
-  } .wishBoxContainer {
+  }
+  .wishBoxContainer {
     display: flex;
     justify-content: center;
     text-align: center;
@@ -256,6 +283,6 @@ body {
   .Row {
     display: flex;
     flex-direction: row;
-    justify-content:center;
+    justify-content: center;
   }
 }

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import "../App.css";
-import { Fade } from "@mui/material";
+import { Fade, Alert, Snackbar } from "@mui/material";
 import MasterCard from "../components/MasterCard";
 import { Data } from "./Data/dataset.js";
 import UpperInfo from "../components/UpperInfo.js";
@@ -8,11 +8,16 @@ import img from "../assets/star.png";
 import wishImg from "../assets/wishStar.png";
 import { Link } from "react-router-dom";
 import { MyWishList } from "../Contexts/MyWishListContext";
+import { useRecoilState } from "recoil";
+import { cardSelectRecoil, wishRecoil } from "../Recoiler/Recoiler.jsx";
+import Footer from "../components/Footer.js";
 
 export default function DashBoardCopy() {
-  const [cardSelect, setCardSelect] = useState(null);
-  const [wish, setWish] = useState({});
+  const [cardSelect, setCardSelect] = useRecoilState(cardSelectRecoil);
+  const [wish, setWish] = useRecoilState(wishRecoil);
   const { addToWishList } = useContext(MyWishList);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const handleWish = (cardName) => {
     setWish((prev) => ({
@@ -20,15 +25,21 @@ export default function DashBoardCopy() {
       [cardName]: !prev[cardName],
     }));
     if (!wish[cardName]) {
-      alert("Added to wishlist");
       addToWishList(cardName);
+      setSnackbarMessage("Added to wishlist successfully!");
     } else {
-      alert("Removed from wishlist");
+      setSnackbarMessage("Removed from wishlist successfully!");
     }
+    setSnackbarOpen(true);
   };
 
   const handleCardShow = (card) => {
     setCardSelect(card);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") return;
+    setSnackbarOpen(false);
   };
 
   return (
@@ -56,6 +67,7 @@ export default function DashBoardCopy() {
               </Fade>
             ))}
           </div>
+          <Footer />
         </div>
       )}
 
@@ -70,26 +82,32 @@ export default function DashBoardCopy() {
               Buy
             </Link>
             <div title="Add to WishList" className="wishBoxContainer">
-              {!wish[cardSelect.coinname] && (
-                <img
-                  title="Add to wishlist"
-                  onClick={() => handleWish(cardSelect.coinname)}
-                  className="wishBox"
-                  src={img}
-                  alt="star"
-                />
-              )}
-              {wish[cardSelect.coinname] && (
-                <img
-                  title="Remove from wishlist"
-                  onClick={() => handleWish(cardSelect.coinname)}
-                  className="wishBox"
-                  src={wishImg}
-                  alt="star"
-                />
-              )}
+              <img
+                title={
+                  wish[cardSelect.coinname]
+                    ? "Remove from wishlist"
+                    : "Add to wishlist"
+                }
+                onClick={() => handleWish(cardSelect.coinname)}
+                className="wishBox"
+                src={wish[cardSelect.coinname] ? wishImg : img}
+                alt="star"
+              />
             </div>
           </div>
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={handleSnackbarClose}
+          >
+            <Alert
+              onClose={handleSnackbarClose}
+              severity="success"
+              sx={{ width: "100%" }}
+            >
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
         </div>
       )}
     </div>

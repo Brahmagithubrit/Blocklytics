@@ -13,6 +13,7 @@ import TransactionPage from "./pages/Transaction";
 import NewsUpdate from "./pages/NewsUpdate";
 import WishListContainer from "./pages/WishListContainer.js";
 import Buy from "./pages/Buy.js";
+import { RecoilRoot } from "recoil";
 
 export default function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -34,7 +35,14 @@ export default function App() {
             }}
           >
             <Routes>
-              <Route path="/" element={<DashBoardCopy />} />
+              <Route
+                path="/"
+                element={
+                  <RecoilRoot>
+                    <DashBoardCopy />
+                  </RecoilRoot>
+                }
+              />
               <Route path="/history" element={<History />} />
               <Route path="/signup" element={<Sign_up />} />
               <Route path="/login" element={<Login />} />
@@ -47,7 +55,7 @@ export default function App() {
             </Routes>
           </div>
         </div>
-      </Router>
+      </Router>{" "}
     </MyWishListProvider>
   );
 }
