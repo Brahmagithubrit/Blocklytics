@@ -13,7 +13,7 @@ export default function WishList() {
           wishlist.map((item, index) => (
             <div className="Row">
               <li key={index}>{item}</li>
-              <button>Buy</button>
+              <Link to="/">Buy</Link>
             </div>
           ))
         ) : (
