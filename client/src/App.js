@@ -23,39 +23,41 @@ export default function App() {
   };
 
   return (
-    <MyWishListProvider>
-      <Router>
-        <div>
-          <Header toggleDrawer={toggleDrawer} />
-          <DrawerComp drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} />
-          <div
-            style={{
-              marginLeft: drawerOpen ? "250px" : "0px",
-              transition: "margin-left 0.3s",
-            }}
-          >
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <RecoilRoot>
-                    <DashBoardCopy />
-                  </RecoilRoot>
-                }
-              />
-              <Route path="/history" element={<History />} />
-              <Route path="/signup" element={<Sign_up />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/wallettracker" element={<WalletTracker />} />
-              <Route path="/priceprediction" element={<PricePrediction />} />
-              <Route path="/transaction" element={<TransactionPage />} />
-              <Route path="/newsupdate" element={<NewsUpdate />} />
-              <Route path="/wishlist" element={<WishListContainer />} />
-              <Route path="/buy" element={<Buy />} />
-            </Routes>
+    <RecoilRoot>
+      <MyWishListProvider>
+        <Router>
+          <div>
+            <Header toggleDrawer={toggleDrawer} />
+            <DrawerComp drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} />
+            <div
+              style={{
+                marginLeft: drawerOpen ? "250px" : "0px",
+                transition: "margin-left 0.3s",
+              }}
+            >
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <RecoilRoot>
+                      <DashBoardCopy />
+                    </RecoilRoot>
+                  }
+                />
+                <Route path="/history" element={<History />} />
+                <Route path="/signup" element={<Sign_up />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/wallettracker" element={<WalletTracker />} />
+                <Route path="/priceprediction" element={<PricePrediction />} />
+                <Route path="/transaction" element={<TransactionPage />} />
+                <Route path="/newsupdate" element={<NewsUpdate />} />
+                <Route path="/wishlist" element={<WishListContainer />} />
+                <Route path="/buy" element={<Buy />} />
+              </Routes>
+            </div>
           </div>
-        </div>
-      </Router>{" "}
-    </MyWishListProvider>
+        </Router>{" "}
+      </MyWishListProvider>
+    </RecoilRoot>
   );
 }

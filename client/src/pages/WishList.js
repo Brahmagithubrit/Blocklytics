@@ -1,9 +1,11 @@
 import React, { useContext } from "react";
 import { MyWishList } from "../Contexts/MyWishListContext";
 import "../App.css";
+import { Link } from "react-router-dom";
 
 export default function WishList() {
   const { wishlist } = useContext(MyWishList);
+  console.log(" in wishlist " + wishlist.length);
 
   return (
     <div className="wishlist">

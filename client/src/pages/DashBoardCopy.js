@@ -12,12 +12,16 @@ import { useRecoilState } from "recoil";
 import { cardSelectRecoil, wishRecoil } from "../Recoiler/Recoiler.jsx";
 import Footer from "../components/Footer.js";
 
+import Button from "@mui/material/Button";
+
+
 export default function DashBoardCopy() {
   const [cardSelect, setCardSelect] = useRecoilState(cardSelectRecoil);
   const [wish, setWish] = useRecoilState(wishRecoil);
   const { addToWishList } = useContext(MyWishList);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  
 
   const handleWish = (cardName) => {
     setWish((prev) => ({
@@ -67,6 +71,14 @@ export default function DashBoardCopy() {
               </Fade>
             ))}
           </div>
+          <div className="desc">
+          <h3>CryptoAnalytics</h3>
+            {" "}
+            CryptoAnalytics provides a fundamental analysis of the crypto market. In
+            addition to tracking price, volume and market capitalisation,
+            CoinGecko tracks community growth, open-source code development,
+            major events and on-chain metrics.
+          </div>
           <Footer />
         </div>
       )}
@@ -96,6 +108,7 @@ export default function DashBoardCopy() {
             </div>
           </div>
           <Snackbar
+            style={{ marginBottom: "30px" }}
             open={snackbarOpen}
             autoHideDuration={6000}
             onClose={handleSnackbarClose}
