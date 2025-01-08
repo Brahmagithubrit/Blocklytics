@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import "../App.css";
+import "../App2.css";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";

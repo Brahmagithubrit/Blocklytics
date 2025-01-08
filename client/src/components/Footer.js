@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import "../App.css";
+import "../App2.css";
 
 export default function Footer() {
           // later use 

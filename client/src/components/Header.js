@@ -15,7 +15,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import cookies from "js-cookie";
 import axios from "axios";
-import "../App.css";
+import "../App2.css";
 
 
 const Search = styled("div")(({ theme }) => ({

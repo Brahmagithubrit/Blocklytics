@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import "../App.css";
+import "../App2.css";
 import { Fade, Alert, Snackbar } from "@mui/material";
 import MasterCard from "../components/MasterCard";
 import { Data } from "./Data/dataset.js";
@@ -11,7 +11,6 @@ import { MyWishList } from "../Contexts/MyWishListContext";
 import { useRecoilState } from "recoil";
 import { cardSelectRecoil, wishRecoil } from "../Recoiler/Recoiler.jsx";
 import Footer from "../components/Footer.js";
-
 import Button from "@mui/material/Button";
 
 
@@ -47,9 +46,9 @@ export default function DashBoardCopy() {
   };
 
   return (
-    <div className="dashBoard">
+    <div className="h-full w-full flex justify-center items-center text-center">
       {!cardSelect && (
-        <div className="parentContent">
+        <div className="parentContent flex ">
           <div className="marqueeParent">
             <marquee>
               <div className="uppermarquee">
