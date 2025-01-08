@@ -101,9 +101,15 @@ export default function Header({ toggleDrawer }) {
   }, []);
 
   return (
-    <Box className="headerStyle" sx={{ flexGrow: 1 }}>
-      <AppBar className="headerStyle" position="static">
-        <Toolbar className="headerStyle">
+    <Box
+      className="p-[3px] flex static gap-[20px] justify-center"
+      sx={{ flexGrow: 1 }}
+    >
+      <AppBar
+        className="p-[3px] flex static gap-[20px] justify-center"
+        position="static"
+      >
+        <Toolbar className="p-[3px] flex static gap-[20px] justify-center">
           <IconButton
             size="large"
             edge="start"

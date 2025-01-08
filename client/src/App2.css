@@ -1,3 +1,48 @@
+/* General Styling */
+body {
+  @apply font-mono m-0 p-0 box-border;
+}
+
+.parentContent {
+  @apply flex flex-col items-center gap-5 p-2.5;
+}
+
+.main_content {
+  @apply flex flex-wrap gap-4 justify-center m-5 font-mono;
+}
+
+.main_content_div_text {
+  @apply mb-4 font-mono text-2xl font-bold p-0.5;
+}
+
+/* Hide PC content for mobile screens */
+#pc_content {
+  @apply block;
+}
+
+#mobile_content {
+  @apply hidden;
+}
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+
+
+
+
+/* Show mobile content and hide PC content */
+@media screen and (max-width: 559px) {
+  #pc_content {
+    display: none;
+  }
+
+  #mobile_content {
+    display: block;
+  }
+}

@@ -8,11 +8,11 @@ export default function Buy() {
   const coin = location.state;
 
   return (
-    <div className="Buy">
+    <div className="flex flex-row">
       <div className="image">
         <img height="250px" width="230px" src={coin.image}></img>
       </div>
-      <div className="desc">
+      <div className="flex flex-col font-sans font-light text-gray-500 text-shadow-sm tracking-wide">
         {" "}
         <p>{coin.coinname}</p>
         <p>Price : $ 1 million </p>

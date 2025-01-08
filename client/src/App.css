@@ -1,28 +1,4 @@
-/* General Styling */
-body {
-  font-family: Consolas, "Courier New", monospace;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  /* height:100vh; */
-}
 
-.parentContent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  padding: 10px;
-}
-
-.main_content {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: center;
-  margin: 20px;
-  font-family: Consolas;
-}
 
 .main_content_div_text {
   margin-bottom: 16px;
@@ -51,6 +27,17 @@ body {
     align-item: center;
     text-align: center;
   }
+  .parentContent {
+    display: flex;
+    flex-direction: column;
+  }
+  .marqueeParent {
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 50px;
+  }
+
+
   button {
     border: none;
     text-decoration: none;
@@ -67,6 +54,7 @@ body {
     display: flex;
     flex-direction: row;
   }
+  /* see this desc again  */
   .desc {
     display: flex;
     flex-direction: column;
@@ -78,11 +66,7 @@ body {
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
     letter-spacing: 1px;
   }
-  .parentContent {
-    display: flex;
-    flex-direction: column;
-  }
-
+  
   .headerStyle {
     padding: 3px;
     display: flex;
@@ -94,7 +78,8 @@ body {
   .btnStyle {
     width: 70px;
     height: 50px;
-    text-decoration: none;
+    text-decoration: none; 
+    /* no-underline */
     margin: 10px;
     font-size: 25px;
     padding: 5px;
@@ -112,12 +97,7 @@ body {
     text-align: center;
   }
 
-  .marqueeParent {
-    padding-left: 20px;
-    padding-right: 20px;
-    height: 50px;
-  }
-
+  
   /* Cards Layout for Mobile */
   .main_content > div {
     flex: 0 0 calc(50% - 16px); /* Two cards per row */
@@ -151,6 +131,7 @@ body {
     text-align: center;
     margin: 20px;
   }
+
   .wishBox {
     width: 30px;
     z-index: 10;
@@ -186,16 +167,7 @@ body {
   }
 }
 
-/* Show mobile content and hide PC content */
-@media screen and (max-width: 559px) {
-  #pc_content {
-    display: none;
-  }
 
-  #mobile_content {
-    display: block;
-  }
-}
 
 /* Media Queries for Larger Screens (e.g., Tablets and Above) */
 @media (min-width: 1024px) {
