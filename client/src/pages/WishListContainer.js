@@ -1,6 +1,6 @@
 import React from "react";
 import WishList from "./WishList";
-import "../App.css";
+import "../App2.css";
 
 export default function WishListContainer() {
   return (

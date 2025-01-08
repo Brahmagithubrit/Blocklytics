@@ -5,7 +5,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
 import axios from "axios";
-import "../App.css";
+import "../App2.css";
 
 import * as reactValue from "react";
 

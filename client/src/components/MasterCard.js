@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import "../App.css";
+import "../App2.css";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -46,7 +46,7 @@ export default function MasterCard({ name, image }) {
         />
         <CardContent>
           <Typography
-            className="main_content_div_text"
+            className="mb-[16px] font-mono text-2xl font-bold p-[2px]"
             gutterBottom
             variant="h5"
             component="div"
@@ -54,7 +54,7 @@ export default function MasterCard({ name, image }) {
             {coinname || (error ? "Error loading" : "Loading...")}
           </Typography>
           <Typography
-            className="main_content_div_text"
+            className="mb-[16px] font-mono text-2xl font-bold p-[2px]"
             variant="body2"
             sx={{ color: "text.secondary" }}
           >
