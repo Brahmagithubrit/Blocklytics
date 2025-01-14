@@ -64,8 +64,30 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+const SettingPriceSchema = new mongoose.Schema({
+  userEmail: {
+    type: String,
+    requried: true,
+    unique: true,
+  },
+  coinName: {
+    type: String,
+    required: true,
+  },
+  targetPrice: {
+    type: Number,
+    required: true,
+  },
+  is_notified: {
+    type: Boolean,
+    required: true,
+  },
+});
+
 const currency = mongoose.model("currency", currencySchema);
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = { currency, User };
+const SettingPrice = mongoose.model("SettingPrice", SettingPriceSchema);
+
+module.exports = { currency, User, SettingPrice };

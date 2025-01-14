@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const coinRoutes = require("./routes/coins");
+const authRoutes = require("./routes/auth")
 const connectToDB = require("./config/db");
 const { fetchCoins } = require("./controllers/coinController");
 const cors = require("cors");
@@ -30,7 +31,7 @@ const startServer = async () => {
     });
 
     app.use("/coins", coinRoutes);
-    app.use("/auth", coinRoutes);
+    app.use("/auth", authRoutes);
 
     app.listen(port, () => console.log(`App listening on port ${port}`));
 

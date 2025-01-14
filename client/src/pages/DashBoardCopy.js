@@ -12,6 +12,7 @@ import { useRecoilState } from "recoil";
 import { cardSelectRecoil, wishRecoil } from "../Recoiler/Recoiler.jsx";
 import Footer from "../components/Footer.js";
 import Button from "@mui/material/Button";
+import axios from "axios";
 
 export default function DashBoardCopy() {
   const [cardSelect, setCardSelect] = useRecoilState(cardSelectRecoil);
@@ -19,6 +20,7 @@ export default function DashBoardCopy() {
   const { addToWishList } = useContext(MyWishList);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [targetPrice, setTargetPrice] = useState(-1);
 
   const handleWish = (cardName) => {
     setWish((prev) => ({
@@ -41,6 +43,24 @@ export default function DashBoardCopy() {
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") return;
     setSnackbarOpen(false);
+  };
+
+  const handleTargetPrice = (card) => {
+    if (targetPrice !== -1) {
+      console.log(targetPrice);
+      setSnackbarMessage(`${card} price value set to $${targetPrice}`);
+      setSnackbarOpen(true);
+    } else {
+      setSnackbarMessage("You are not selecting Value ");
+      setSnackbarOpen(true);
+      return;
+    }
+    const targetCoinName = cardSelect.coinname;
+
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/coins/storeTarget`, {
+      targetCoinName,
+      targetPrice,
+    });
   };
 
   return (
@@ -80,7 +100,7 @@ export default function DashBoardCopy() {
       )}
 
       {cardSelect && (
-        <div className="h-[400px] w-[280px] flex justify-center items-center text-center flex-col">
+        <div className=" w-[280px] flex justify-center items-center text-center flex-col">
           <MasterCard name={cardSelect.coinname} image={cardSelect.image} />
           <div className="flex flex-row justify-center items-center mt-10 gap-2">
             <button
@@ -92,7 +112,7 @@ export default function DashBoardCopy() {
             <Link
               className="w-[50px] h-[50px] no-underline mx-3 text-2xl flex items-center  mt-2 justify-center border-none text-black"
               to="/buy"
-              state={cardSelegict}
+              state={cardSelect}
             >
               Buy
             </Link>
@@ -112,6 +132,34 @@ export default function DashBoardCopy() {
                 alt="star"
               />
             </div>
+          </div>
+          <div className="settingPrice m-5">
+            <label className="font-medium">
+              On which price you are targeting to buy
+            </label>
+            <div className="flex flex-row items-center justify-center gap-2">
+              <div className="flex flex-row border-2 border-gray-500 m-3 rounded w-[200px] h-11 items-center">
+                <span className="flex justify-center ml-2 text-center">$</span>
+                <input
+                  className="font-bold font-serif
+                   border-none p-3 rounded w-[150px] h-10 focus:outline-none"
+                  type="number"
+                  placeholder="Set Price"
+                  onChange={(E) => setTargetPrice(E.target.value)}
+                />
+              </div>
+              <Button
+                className="h-10 font-mono font-bold "
+                variant="contained"
+                color="primary"
+                onClick={() => handleTargetPrice(cardSelect.coinname)}
+              >
+                Set{" "}
+              </Button>
+            </div>
+            <label className="font-medium">
+              we will notify you when the price reaches this value
+            </label>
           </div>
 
           <Snackbar

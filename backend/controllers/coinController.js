@@ -1,6 +1,6 @@
 const axios = require("axios");
 const env = require("dotenv");
-const { currency, User } = require("../models/model.index");
+const { currency, User, SettingPrice } = require("../models/model.index");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const cookie = require("cookie-parser");
@@ -18,8 +18,9 @@ app.use(
     credentials: true,
   })
 );
+app.use(express.urlencoded({ extended: true }));
 
-app.use(express.json()); 
+app.use(express.json());
 app.use(cookie());
 
 const fetchCoins = async () => {
@@ -148,11 +149,29 @@ const getDeviation = async (req, res) => {
   }
 };
 
+const StoreTargetPrice = async (req, res) => {
+  const { targetCoinName, targetPrice } = req.body;
+  const userEmail = "rough@gmail.com"; // hardcoded for now
 
+  try {
+    const alert = await SettingPrice.create({
+      userEmail: userEmail,
+      coinName: targetCoinName,
+      targetPrice: targetPrice,
+      is_notified: false,
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ message: "Duplicate alert for user." });
+    }
+    res.status(500).json({ message: "Failed to create alert." });
+  }
+
+};
 
 module.exports = {
   fetchCoins,
   getStats,
   getDeviation,
- 
+  StoreTargetPrice,
 };
