@@ -12,7 +12,6 @@ const router = express.Router();
 
 router.get("/stats", getStats);
 router.get("/deviation", getDeviation);
-
 router.post("/storeTarget", StoreTargetPrice);
 
 module.exports = router;
