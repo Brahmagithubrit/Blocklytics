@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
 import axios from "axios";
 
-export default function MasterCard({ name, image }) {
+export default function MasterCard({ name, image, triggerRefresh }) {
   const [coinname, setCoinname] = useState("");
   const [value, setValue] = useState("");
   const [price, setPrice] = useState(0);
@@ -19,8 +19,9 @@ export default function MasterCard({ name, image }) {
   async function getStat() {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/coins/stats?coin=${name}`
+        `http://localhost:5000/coins/stats?coin=${name}`
       );
+      console.log(response);
       setCoinname(name[0].toUpperCase() + name.substring(1, name.length));
       setValue(response.data.current_price);
       setPrice(response.data.market_cap);
@@ -32,8 +33,10 @@ export default function MasterCard({ name, image }) {
   }
 
   useEffect(() => {
+    // console.log("trigger refresh in master card data fetch  ");
+
     getStat();
-  }, [name]);
+  }, [name, triggerRefresh]);
 
   return (
     <Card sx={{ maxWidth: 345, boxShadow: 5 }}>

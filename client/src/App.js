@@ -14,6 +14,7 @@ import NewsUpdate from "./pages/NewsUpdate";
 import WishListContainer from "./pages/WishListContainer.js";
 import Buy from "./pages/Buy.js";
 import { RecoilRoot } from "recoil";
+import Charts from "./components/Charts.js";
 
 export default function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -53,6 +54,7 @@ export default function App() {
                 <Route path="/newsupdate" element={<NewsUpdate />} />
                 <Route path="/wishlist" element={<WishListContainer />} />
                 <Route path="/buy" element={<Buy />} />
+                <Route path="/chart" element={<Charts />} />
               </Routes>
             </div>
           </div>

@@ -15,6 +15,64 @@ body {
   @apply mb-4 font-mono text-2xl font-bold p-0.5;
 }
 
+.notification_box {
+  width: 360px;
+  max-width: 90%;
+  position: fixed;
+  top: 60px;
+  left: 20px;
+  z-index: 1000;
+  padding: 1rem 1.5rem;
+  background-color: #ffffff;
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  animation: slideIn 0.4s ease-out;
+  transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+  word-break: break-word;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Status Variants */
+.notification_box.success {
+  border-left: 5px solid #22c55e; /* Green */
+}
+
+.notification_box.error {
+  border-left: 5px solid #ef4444; /* Red */
+}
+
+.notification_box.info {
+  border-left: 5px solid #3b82f6; /* Blue */
+}
+
+/* Slide-In Animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(50%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Fade-Out Style */
+.notification_box.fadeOut {
+  opacity: 0;
+  transform: translateX(30%);
+  pointer-events: none;
+}
+
+
+
 /* Hide PC content for mobile screens */
 #pc_content {
   @apply block;
@@ -24,17 +82,9 @@ body {
   @apply hidden;
 }
 
-
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
-
-
-
-
 
 /* Show mobile content and hide PC content */
 @media screen and (max-width: 559px) {

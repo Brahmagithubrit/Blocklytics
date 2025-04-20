@@ -3,6 +3,7 @@ const {
   getStats,
   getDeviation,
   StoreTargetPrice,
+  getBitcoinHistory
 } = require("../controllers/coinController");
 
 
@@ -12,6 +13,7 @@ const router = express.Router();
 
 router.get("/stats", getStats);
 router.get("/deviation", getDeviation);
+router.get("/history", getBitcoinHistory);
 
 router.post("/storeTarget", StoreTargetPrice);
 

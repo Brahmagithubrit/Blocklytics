@@ -27,13 +27,16 @@ const fetchCoins = async () => {
   try {
     if (mongoose.connection.readyState !== 1) return;
 
-    const response = await axios.get(process.env.site_url, {
-      params: {
-        vs_currency: "usd",
-        ids: "bitcoin,ethereum,matic-network,solana,litecoin,polkadot,dogecoin",
-      },
-      headers: { accept: "application/json" },
-    });
+    const response = await axios.get(
+      "https://api.coingecko.com/api/v3/coins/markets",
+      {
+        params: {
+          vs_currency: "usd",
+          ids: "bitcoin,ethereum,matic-network,solana,litecoin,polkadot,dogecoin",
+        },
+        headers: { accept: "application/json" },
+      }
+    );
 
     const data = {
       bitcoin: response.data.find((coin) => coin.id === "bitcoin"),
@@ -166,12 +169,52 @@ const StoreTargetPrice = async (req, res) => {
     }
     res.status(500).json({ message: "Failed to create alert." });
   }
-
 };
 
+const getBitcoinHistory = async (req, res) => {
+  try {
+    const response = await currency.find({},
+    {
+      "bitcoin.current_price": 1,
+      "ethereum.current_price": 1,
+      "matic.current_price": 1,
+      "solana.current_price": 1,
+      "litecoin.current_price": 1,
+      "polkadot.current_price": 1,
+      "dogecoin.current_price": 1,
+      _id: 0,
+    }
+  );
+  console.log(response);
+
+  const bitcoin = response.map((data) => data.bitcoin?.current_price || 0);
+  const ethereum = response.map((data) => data.ethereum?.current_price || 0);
+  const matic = response.map((data) => data.matic?.current_price || 0);
+  const solana = response.map(data => data.solana?.current_price || 0);
+  const litecoin = response.map(data => data.litecoin?.current_price || 0);
+  const polkadot = response.map(data => data.litecoin?.current_price || 0);
+  const dogecoin = response.map(data => data.dogecoin?.current_price || 0);
+
+  const output = [
+    { name: "bitcoin", price: bitcoin },
+    { name: "ethereum", prices: ethereum },
+    { name: "matic", prices: matic },
+    { name: "solana", prices: solana },
+    { name: "litecoin", prices: litecoin },
+    { name: "polkadot", prices: polkadot },
+    { name: "dogecoin", prices: dogecoin },
+  ];
+
+  res.json(output);
+  } catch (error) {
+    console.error(`error in fetching history of all coins ${error}`)
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 module.exports = {
   fetchCoins,
   getStats,
   getDeviation,
   StoreTargetPrice,
+  getBitcoinHistory,
 };

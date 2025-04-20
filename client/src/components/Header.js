@@ -16,6 +16,7 @@ import MenuItem from "@mui/material/MenuItem";
 import cookies from "js-cookie";
 import axios from "axios";
 import "../App2.css";
+import {ToggleToDark} from "../utils/Theme"
 
 
 const Search = styled("div")(({ theme }) => ({
@@ -29,7 +30,7 @@ const Search = styled("div")(({ theme }) => ({
   width: "100%",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
-    width: "auto",
+    width: "400px",
   },
 }));
 
@@ -83,7 +84,7 @@ export default function Header({ toggleDrawer }) {
       console.log("token is present");
 
       axios
-        .get(`process.env.REACT_APP_BACKEND_URL/auth/isLoggedIn`, { token })
+        .get(`http://localhost:5000/auth/isLoggedIn`, { token })
         .then((response) => {
           if (response.data.valid) {
             console.log("true returning from backend")
@@ -102,7 +103,7 @@ export default function Header({ toggleDrawer }) {
 
   return (
     <Box
-      className="p-[3px] flex static gap-[20px] justify-center"
+      className=" p-[3px] flex static gap-[20px] justify-center"
       sx={{ flexGrow: 1 }}
     >
       <AppBar
@@ -193,6 +194,12 @@ export default function Header({ toggleDrawer }) {
           ) : (
             <Avatar style={{ height: "35px", width: "35px" }}>A</Avatar>
           )}
+          <button
+            onClick={ToggleToDark}
+            className="p-2 text-black bg-gray-200 dark:bg-gray-800 dark:text-white rounded"
+          >
+            dark mode
+          </button>
         </Toolbar>
       </AppBar>
     </Box>

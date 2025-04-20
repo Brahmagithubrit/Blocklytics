@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "../App2.css";
 import { Fade, Alert, Snackbar } from "@mui/material";
 import MasterCard from "../components/MasterCard";
@@ -13,6 +13,10 @@ import { cardSelectRecoil, wishRecoil } from "../Recoiler/Recoiler.jsx";
 import Footer from "../components/Footer.js";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import Timer from "./Timer.js";
+
+//socket for notification
+import { io } from "socket.io-client";
 
 export default function DashBoardCopy() {
   const [cardSelect, setCardSelect] = useRecoilState(cardSelectRecoil);
@@ -21,6 +25,9 @@ export default function DashBoardCopy() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [targetPrice, setTargetPrice] = useState(-1);
+  const [trigger, setTrigger] = useState(false);
+  const [notification, setNotification] = useState([]);
+  const [fadeOut, setFadeOut] = useState(false);
 
   const handleWish = (cardName) => {
     setWish((prev) => ({
@@ -57,17 +64,53 @@ export default function DashBoardCopy() {
     }
     const targetCoinName = cardSelect.coinname;
 
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/coins/storeTarget`, {
+    axios.post(`https://localhost:5000/coins/storeTarget`, {
       targetCoinName,
       targetPrice,
     });
   };
 
+  const triggerRefresh = () => {
+    setTrigger((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const socket = io("http://localhost:5000");
+
+    socket.on("welcome", (data) => {
+      console.log("Server says: ", data.message);
+      setNotification((prev) => [
+        ...prev,
+        { message: data.message, timeStamp: Date.now() },
+      ]);
+    });
+
+    setTimeout(() => {
+      setFadeOut(true);
+      setNotification((prev) =>
+        notification.filter((note) => note.timeStamp !== data.timeStamp)
+      );
+    }, 5000); // message removed after 3 second
+
+    return () => {
+      socket.off("welcome"); // Clean up only the listener
+    };
+  }, []);
+
   return (
-    <div className="h-full w-full flex justify-center items-center text-center">
+    <div className="bg-white text-black dark:bg-black dark:text-whiteh-full w-full flex justify-center items-center text-center">
       {!cardSelect && (
         <div className="flex flex-col">
-          <div className="pl-[20px] pr-[20px] h-[50px]">
+          <div className="pl-[20px] pr-[20px] h-[50px] flex flex-row">
+            {notification.map((note, index) => (
+              <div
+                key={note.id || index}
+                className={`notification_box ${note.fadeOut ? "fadeOut" : ""}`}
+              >
+                <p>{note.message}</p>
+              </div>
+            ))}
+
             <marquee>
               <div className="w-full h-[50px] flex gap-[15px] text-center mt-3">
                 {Data.map((card, index) => (
@@ -75,15 +118,20 @@ export default function DashBoardCopy() {
                 ))}
               </div>
             </marquee>
+            <Timer triggerRefresh={triggerRefresh} />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {Data.map((card, index) => (
               <Fade in={true} timeout={1000 + index * 500} key={index}>
                 <div
-                  className="flex flex-col items-center justify-center w-36 h-88 m-[10px] bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-all"
+                  className="flex flex-col items-center justify-center w-36 h-88 lg:w-[430px] lg:h-100 m-[10px] bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-all"
                   onClick={() => handleCardShow(card)}
                 >
-                  <MasterCard name={card.coinname} image={card.image} />
+                  <MasterCard
+                    name={card.coinname}
+                    image={card.image}
+                    triggerRefresh={triggerRefresh}
+                  />
                 </div>
               </Fade>
             ))}

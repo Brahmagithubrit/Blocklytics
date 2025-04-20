@@ -37,6 +37,19 @@ export default function DrawerComp({ drawerOpen, toggleDrawer }) {
       <List>
         <ListItem disablePadding>
           <Link
+            to="/"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Return to Dashboard" />
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        <ListItem disablePadding>
+          <Link
             to="/priceprediction"
             style={{ textDecoration: "none", color: "inherit" }}
           >

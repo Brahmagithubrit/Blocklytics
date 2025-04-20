@@ -19,7 +19,7 @@ export default function UpperInfo({ name }) {
   async function getStat() {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/coins/stats?coin=${name}`
+        `http://localhost:5000/coins/stats?coin=${name}`
       );
       setCoinname(name[0].toUpperCase() + name.substring(1, name.length));
       setValue(response.data.current_price);
