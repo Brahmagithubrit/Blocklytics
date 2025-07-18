@@ -24,12 +24,12 @@ blocklytics/
 
 ## 🛠️ Tech Stack
 
-# Frontend (client):
+## Frontend (client):
 - React (or any other framework you used)
 - Chart.js / Recharts for graphs
 - Axios for API integration
 
-# Backend (server):
+## Backend (server):
 - Node.js with Express
 - CoinGecko or CoinMarketCap API
 - Socket.IO or interval polling for live updates
@@ -80,6 +80,6 @@ MIT License
 ## 👨‍💻 Author
 Made with ❤️ by **Brahma**
 
-[LinkedIn](https://www.linkedin.com/in/yourprofile](https://www.linkedin.com/in/brahmananda-tosh-770995266/))
+[LinkedIn](https://www.linkedin.com/in/brahmananda-tosh-770995266/)
 
 
