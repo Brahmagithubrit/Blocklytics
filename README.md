@@ -2,7 +2,7 @@
 ```markdown
 # 🧱 Blocklytics - Real-Time Crypto Analytics Dashboard
 
-**Blocklytics** is a full-stack crypto analysis platform that provides real-time price comparison between multiple cryptocurrencies. It helps users identify the best coin to buy based on live data. A buy/sell functionality is planned for future updates to make this platform a complete crypto trade companion.
+Blocklytics is a full-stack crypto analysis platform that provides real-time price comparison between multiple cryptocurrencies. It helps users identify the best coin to buy based on live data. A buy/sell functionality is planned for future updates to make this platform a complete crypto trade companion.
 
 ## 📂 Project Structure
 
@@ -24,12 +24,12 @@ blocklytics/
 
 ## 🛠️ Tech Stack
 
-**Frontend (client):**
+# Frontend (client):
 - React (or any other framework you used)
 - Chart.js / Recharts for graphs
 - Axios for API integration
 
-**Backend (server):**
+# Backend (server):
 - Node.js with Express
 - CoinGecko or CoinMarketCap API
 - Socket.IO or interval polling for live updates
@@ -78,9 +78,8 @@ Contributions are welcome. Open issues or submit pull requests to suggest featur
 MIT License
 
 ## 👨‍💻 Author
-
 Made with ❤️ by **Brahma**
 
-[LinkedIn](https://www.linkedin.com/in/yourprofile) • [Twitter](https://twitter.com/yourhandle)
+[LinkedIn](https://www.linkedin.com/in/yourprofile](https://www.linkedin.com/in/brahmananda-tosh-770995266/))
 
 
