@@ -1,10 +1,8 @@
-```
-```markdown
-# 🧱 Blocklytics - Real-Time Crypto Analytics Dashboard
+Blocklytics - Real-Time Crypto Analytics Dashboard
 
 Blocklytics is a full-stack crypto analysis platform that provides real-time price comparison between multiple cryptocurrencies. It helps users identify the best coin to buy based on live data. A buy/sell functionality is planned for future updates to make this platform a complete crypto trade companion.
 
-## 📂 Project Structure
+📂 Project Structure
 
 ```
 
@@ -82,5 +80,3 @@ MIT License
 Made with ❤️ by **Brahma**
 
 [LinkedIn](https://www.linkedin.com/in/brahmananda-tosh-770995266/)
-
-```
