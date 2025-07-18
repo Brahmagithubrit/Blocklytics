@@ -1,4 +1,4 @@
-
+```
 ```markdown
 # 🧱 Blocklytics - Real-Time Crypto Analytics Dashboard
 
@@ -10,6 +10,7 @@ Blocklytics is a full-stack crypto analysis platform that provides real-time pri
 
 blocklytics/
 ├── client/   # Frontend - handles UI and data visualization
+
 ├── backend/   # Backend - handles data fetching, processing, and APIs
 
 ````
@@ -82,4 +83,4 @@ Made with ❤️ by **Brahma**
 
 [LinkedIn](https://www.linkedin.com/in/brahmananda-tosh-770995266/)
 
-
+```
