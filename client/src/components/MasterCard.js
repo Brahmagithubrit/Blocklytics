@@ -1,7 +1,4 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
-import "../App2.css";
-
+import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -21,11 +18,11 @@ export default function MasterCard({ name, image, triggerRefresh }) {
       const response = await axios.get(
         `http://localhost:5000/coins/stats?coin=${name}`
       );
-      console.log(response);
-      setCoinname(name[0].toUpperCase() + name.substring(1, name.length));
+      setCoinname(name[0].toUpperCase() + name.slice(1));
       setValue(response.data.current_price);
       setPrice(response.data.market_cap);
       setTwentyfourhourChange(response.data.price_change_percentage_24h);
+      setError(false);
     } catch (err) {
       setError(true);
       console.error("Error fetching coin stats", err);
@@ -33,40 +30,56 @@ export default function MasterCard({ name, image, triggerRefresh }) {
   }
 
   useEffect(() => {
-    // console.log("trigger refresh in master card data fetch  ");
-
     getStat();
   }, [name, triggerRefresh]);
 
   return (
-    <Card sx={{ maxWidth: 345, boxShadow: 5 }}>
-      <CardActionArea>
+    <Card
+      className="bg-white dark:bg-black dark:text-white flex flex-col items-center justify-start"
+      sx={{
+        width: 340  ,
+        height: 400, 
+        boxShadow: "none",
+        border : "none",
+        m: 0,
+        p: 0,
+      }}
+    >
+      <CardActionArea className="flex flex-col items-center p-2 h-full">
         <CardMedia
           component="img"
-          height="140"
           image={image}
           alt={`${name} image`}
+          sx={{
+            width: "100%",
+            height: 140, 
+            objectFit: "contain",
+            mb: 1,
+          }}
         />
-        <CardContent>
+        <CardContent
+          className="flex flex-col items-center justify-between"
+          sx={{ flexGrow: 1 }}
+        >
           <Typography
-            className="mb-[16px] font-mono text-2xl font-bold p-[2px]"
-            gutterBottom
             variant="h5"
             component="div"
+            className="font-mono text-2xl font-bold text-center"
+            sx={{ minHeight: 40 }} // reserve space to align all cards
           >
             {coinname || (error ? "Error loading" : "Loading...")}
           </Typography>
           <Typography
-            className="mb-[16px] font-mono text-2xl font-bold p-[2px]"
             variant="body2"
-            sx={{ color: "text.secondary" }}
+            className="font-mono text-lg text-center"
+            sx={{ minHeight: 80 }} // reserve space for text content
           >
             {error ? (
               "Failed to load data"
             ) : (
               <>
-                Value: $ {value || "Loading..."} <br />
-                Price: $ {price || "Loading..."} <br />
+                Value: ${value || "Loading..."} <br />
+                Market Cap: ${price || "Loading..."} <br />
                 24-Hour Change: {twentyfourhourChange || "Loading..."}%
               </>
             )}

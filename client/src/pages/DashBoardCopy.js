@@ -1,6 +1,6 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import "../App2.css";
-import { Fade, Alert, Snackbar } from "@mui/material";
+import { Fade, Alert, Snackbar, Button } from "@mui/material";
 import MasterCard from "../components/MasterCard";
 import { Data } from "./Data/dataset.js";
 import UpperInfo from "../components/UpperInfo.js";
@@ -11,12 +11,9 @@ import { MyWishList } from "../Contexts/MyWishListContext";
 import { useRecoilState } from "recoil";
 import { cardSelectRecoil, wishRecoil } from "../Recoiler/Recoiler.jsx";
 import Footer from "../components/Footer.js";
-import Button from "@mui/material/Button";
-import axios from "axios";
 import Timer from "./Timer.js";
-
-//socket for notification
 import { io } from "socket.io-client";
+import axios  from "axios";
 
 export default function DashBoardCopy() {
   const [cardSelect, setCardSelect] = useRecoilState(cardSelectRecoil);
@@ -27,106 +24,90 @@ export default function DashBoardCopy() {
   const [targetPrice, setTargetPrice] = useState(-1);
   const [trigger, setTrigger] = useState(false);
   const [notification, setNotification] = useState([]);
-  const [fadeOut, setFadeOut] = useState(false);
+  const notificationRef = useRef(null);
+  const marqueeRef = useRef(null);
 
   const handleWish = (cardName) => {
-    setWish((prev) => ({
-      ...prev,
-      [cardName]: !prev[cardName],
-    }));
-    if (!wish[cardName]) {
-      addToWishList(cardName);
-      setSnackbarMessage("Added to wishlist successfully!");
-    } else {
-      setSnackbarMessage("Removed from wishlist successfully!");
-    }
+    setWish((prev) => ({ ...prev, [cardName]: !prev[cardName] }));
+    if (!wish[cardName]) addToWishList(cardName);
+    setSnackbarMessage(
+      !wish[cardName]
+        ? "Added to wishlist successfully!"
+        : "Removed from wishlist successfully!"
+    );
     setSnackbarOpen(true);
   };
 
-  const handleCardShow = (card) => {
+  function handleCardShow(card) {
+    console.log("Card clicked");
     setCardSelect(card);
-  };
+  }
+  // const handleCardShow = (card) => { console.log("card clicked");   setCardSelect(card);}
 
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") return;
-    setSnackbarOpen(false);
-  };
+  const handleSnackbarClose = (e, reason) =>
+    reason === "clickaway" || setSnackbarOpen(false);
 
   const handleTargetPrice = (card) => {
-    if (targetPrice !== -1) {
-      console.log(targetPrice);
-      setSnackbarMessage(`${card} price value set to $${targetPrice}`);
-      setSnackbarOpen(true);
-    } else {
-      setSnackbarMessage("You are not selecting Value ");
+    if (targetPrice === -1) {
+      setSnackbarMessage("You are not selecting Value");
       setSnackbarOpen(true);
       return;
     }
-    const targetCoinName = cardSelect.coinname;
-
-    axios.post(`https://localhost:5000/coins/storeTarget`, {
-      targetCoinName,
+    setSnackbarMessage(`${card} price value set to $${targetPrice}`);
+    setSnackbarOpen(true);
+    axios.post(`http://localhost:5000/coins/storeTarget`, {
+      targetCoinName: cardSelect.coinname,
       targetPrice,
     });
   };
 
-  const triggerRefresh = () => {
-    setTrigger((prev) => !prev);
-  };
+  const triggerRefresh = () => setTrigger((prev) => !prev);
 
   useEffect(() => {
-    const socket = io("http://localhost:5000");
-
-    socket.on("welcome", (data) => {
-      console.log("Server says: ", data.message);
-      setNotification((prev) => [
-        ...prev,
-        { message: data.message, timeStamp: Date.now() },
-      ]);
-    });
-
-    setTimeout(() => {
-      setFadeOut(true);
-      setNotification((prev) =>
-        notification.filter((note) => note.timeStamp !== data.timeStamp)
-      );
-    }, 5000); // message removed after 3 second
-
-    return () => {
-      socket.off("welcome"); // Clean up only the listener
-    };
+    // const socket = io("http://localhost:5000");
+    // socket.on("welcome", (data) => {
+    //   setNotification((prev) => [
+    //     ...prev,
+    //     { message: data.message, timeStamp: Date.now() },
+    //   ]);
+    // });
+    // return () => socket.off("welcome");
   }, []);
 
   return (
-    <div className="bg-white text-black dark:bg-black dark:text-whiteh-full w-full flex justify-center items-center text-center">
-      {!cardSelect && (
-        <div className="flex flex-col">
-          <div className="pl-[20px] pr-[20px] h-[50px] flex flex-row">
-            {notification.map((note, index) => (
-              <div
-                key={note.id || index}
-                className={`notification_box ${note.fadeOut ? "fadeOut" : ""}`}
-              >
-                <p>{note.message}</p>
-              </div>
-            ))}
-
-            <marquee>
-              <div className="w-full h-[50px] flex gap-[15px] text-center mt-3">
-                {Data.map((card, index) => (
-                  <UpperInfo name={card.coinname} key={index} />
+    <div className="bg-white dark:bg-black dark:text-white min-h-screen w-full px-4 md:px-10 py-5 flex flex-col items-center">
+      {!cardSelect ? (
+        <>
+          <div className="flex flex-col w-full mb-6">
+            {/* <div className="flex justify-between items-center mb-3">
+              <div ref={notificationRef} className="flex gap-2 overflow-x-auto">
+                {notification.map((note, index) => (
+                  <div key={index} className="notification_box">
+                    {note.message}
+                  </div>
                 ))}
               </div>
-            </marquee>
-            <Timer triggerRefresh={triggerRefresh} />
+            </div> */}
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <marquee ref={marqueeRef} className="w-full overflow-hidden">
+                <div className="flex gap-4">
+                  {Data.map((card, idx) => (
+                    <UpperInfo name={card.coinname} key={idx} />
+                  ))}
+                </div>
+              </marquee>
+              <Timer triggerRefresh={triggerRefresh} />
+            </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full justify-center">
             {Data.map((card, index) => (
-              <Fade in={true} timeout={1000 + index * 500} key={index}>
-                <div
-                  className="flex flex-col items-center justify-center w-36 h-88 lg:w-[430px] lg:h-100 m-[10px] bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-all"
-                  onClick={() => handleCardShow(card)}
-                >
+              <Fade
+                onClick={() => handleCardShow(card)}
+                in={true}
+                timeout={1000 + index * 200}
+                key={index}
+              >
+                <div className="flex justify-center">
                   <MasterCard
                     name={card.coinname}
                     image={card.image}
@@ -135,97 +116,89 @@ export default function DashBoardCopy() {
                 </div>
               </Fade>
             ))}
-          </div>
-
-          <div className="flex flex-col font-serif font-light text-gray-500 text-shadow-sm tracking-wide">
-            <h3>CryptoAnalytics</h3> CryptoAnalytics provides a fundamental
-            analysis of the crypto market. In addition to tracking price, volume
-            and market capitalisation, CoinGecko tracks community growth,
-            open-source code development, major events and on-chain metrics.
-          </div>
-          <Footer />
-        </div>
-      )}
-
-      {cardSelect && (
-        <div className=" w-[280px] flex justify-center items-center text-center flex-col">
+          </div>{" "}
+        </>
+      ) : (
+        <div className="flex flex-col items-center w-full max-w-md">
           <MasterCard name={cardSelect.coinname} image={cardSelect.image} />
-          <div className="flex flex-row justify-center items-center mt-10 gap-2">
+
+          <div className="flex gap-3 mt-5">
             <button
               onClick={() => setCardSelect(null)}
-              className="w-[50px] h-[40px] no-underline mx-3 text-2xl border-none text-black mt-2"
+              className="px-3 py-2 bg-gray-200 dark:bg-gray-700 rounded"
             >
               Back
             </button>
             <Link
-              className="w-[50px] h-[50px] no-underline mx-3 text-2xl flex items-center  mt-2 justify-center border-none text-black"
               to="/buy"
               state={cardSelect}
+              className="px-3 py-2 bg-blue-500 text-white rounded"
             >
               Buy
             </Link>
-            <div
-              title="Add to WishList"
-              className="flex items-center justify-center"
-            >
-              <img
-                title={
-                  wish[cardSelect.coinname]
-                    ? "Remove from wishlist"
-                    : "Add to wishlist"
-                }
-                onClick={() => handleWish(cardSelect.coinname)}
-                className="w-[25px] h-[25px] cursor-pointer"
-                src={wish[cardSelect.coinname] ? wishImg : img}
-                alt="star"
-              />
-            </div>
+            <img
+              onClick={() => handleWish(cardSelect.coinname)}
+              className="w-6 h-6 cursor-pointer"
+              src={wish[cardSelect.coinname] ? wishImg : img}
+              alt="star"
+              title={
+                wish[cardSelect.coinname]
+                  ? "Remove from wishlist"
+                  : "Add to wishlist"
+              }
+            />
           </div>
-          <div className="settingPrice m-5">
-            <label className="font-medium">
-              On which price you are targeting to buy
-            </label>
-            <div className="flex flex-row items-center justify-center gap-2">
-              <div className="flex flex-row border-2 border-gray-500 m-3 rounded w-[200px] h-11 items-center">
-                <span className="flex justify-center ml-2 text-center">$</span>
+
+          <div className="mt-5 w-full flex flex-col gap-2">
+            <label className="font-medium">Set target price to buy</label>
+            {/* <p> price : {targetPrice}</p> */} 
+            <div className="flex gap-2">
+              <div className="flex border-2 border-gray-500 rounded w-full items-center px-2">
+                <span>$</span>
+
                 <input
-                  className="font-bold font-serif
-                   border-none p-3 rounded w-[150px] h-10 focus:outline-none"
+                  // value={targetPrice}
                   type="number"
                   placeholder="Set Price"
-                  onChange={(E) => setTargetPrice(E.target.value)}
+                  className="w-full border-none outline-none px-2 py-1 bg-white dark:bg-gray-800 text-black dark:text-white placeholder-black dark:placeholder-white"
+                  onChange={(e) => {
+                    console.log("value changed :" + e.target.value);
+                    setTargetPrice(e.target.value);
+                  }}
                 />
               </div>
               <Button
-                className="h-10 font-mono font-bold "
                 variant="contained"
                 color="primary"
                 onClick={() => handleTargetPrice(cardSelect.coinname)}
               >
-                Set{" "}
+                Set
               </Button>
             </div>
-            <label className="font-medium">
-              we will notify you when the price reaches this value
-            </label>
+            <span className="text-sm text-gray-500">
+              We will notify you when the price reaches this value
+            </span>
           </div>
-
-          <Snackbar
-            style={{ marginBottom: "30px" }}
-            open={snackbarOpen}
-            autoHideDuration={6000}
-            onClose={handleSnackbarClose}
-          >
-            <Alert
-              onClose={handleSnackbarClose}
-              severity="success"
-              sx={{ width: "100%" }}
-            >
-              {snackbarMessage}
-            </Alert>
-          </Snackbar>
         </div>
       )}
+
+      {/* <Footer /> */}
+
+      {/* Snackbar */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

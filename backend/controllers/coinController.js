@@ -155,20 +155,24 @@ const getDeviation = async (req, res) => {
 const StoreTargetPrice = async (req, res) => {
   const { targetCoinName, targetPrice } = req.body;
   const userEmail = "rough@gmail.com"; // hardcoded for now
-
+  console.log (req.body)
   try {
-    const alert = await SettingPrice.create({
+    const alert = await SettingPrice.findOneAndUpdate({
       userEmail: userEmail,
       coinName: targetCoinName,
-      targetPrice: targetPrice,
+      targetPrice: Number(targetPrice),
       is_notified: false,
     });
+    console.log("alert : " + alert);
   } catch (error) {
+    console.log ("It go to catch ")
     if (error.code === 11000) {
       return res.status(400).json({ message: "Duplicate alert for user." });
     }
-    res.status(500).json({ message: "Failed to create alert." });
+    return res.status(500).json({ message: "Failed to create alert." });
   }
+
+  res.json ({message : "target amount saved for notification"})
 };
 
 const getBitcoinHistory = async (req, res) => {
@@ -218,3 +222,6 @@ module.exports = {
   StoreTargetPrice,
   getBitcoinHistory,
 };
+
+
+

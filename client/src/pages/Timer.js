@@ -43,7 +43,7 @@ export default function Timer({ triggerRefresh }) {
   };
 
   return (
-    <div className="Head">
+    <div className= "bg-white dark:bg-black dark:text-white flex flex-col items-center justify-start Head">
       {showLoader ? (
         <div className="loader"></div>
       ) : (

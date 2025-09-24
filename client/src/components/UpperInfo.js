@@ -36,7 +36,7 @@ export default function UpperInfo({ name }) {
   }, [name]);
   return (
     <>
-      <div className="list">
+      <div className="bg-white dark:bg-black dark:text-white flex flex-col items-center justify-start list">
         {" "}
         <p>
           {" "}

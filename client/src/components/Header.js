@@ -96,7 +96,6 @@ export default function Header({ toggleDrawer }) {
         });
     } else {
       console.log("token is not present");
-
       setIsLoggedIn(false);
     }
   }, []);

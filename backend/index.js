@@ -16,10 +16,17 @@ const port = process.env.PORT || 5000;
 
 const server = http.createServer(app); // why this instead of app.listen
 //because express server cannot create actal server it create instance of actual server which cannot suport in socket io
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*" ,
     methods: ["GET", "POST"],
     credentials: true,
   },

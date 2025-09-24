@@ -67,8 +67,7 @@ const userSchema = new mongoose.Schema({
 const SettingPriceSchema = new mongoose.Schema({
   userEmail: {
     type: String,
-    requried: true,
-    unique: true,
+    required: true,
   },
   coinName: {
     type: String,
@@ -91,3 +90,5 @@ const User = mongoose.model("User", userSchema);
 const SettingPrice = mongoose.model("SettingPrice", SettingPriceSchema);
 
 module.exports = { currency, User, SettingPrice };
+
+
